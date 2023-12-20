@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bitcodetech.mvvmdemo2.R
 import com.bitcodetech.mvvmdemo2.adapters.UsersAdapter
+import com.bitcodetech.mvvmdemo2.databinding.AddUserFragmentBinding
+import com.bitcodetech.mvvmdemo2.databinding.UsersFragmentBinding
 import com.bitcodetech.mvvmdemo2.factory.MyViewModelFactory
 import com.bitcodetech.mvvmdemo2.network.UsersApiService
 import com.bitcodetech.mvvmdemo2.repository.UsersRepository
@@ -20,8 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class UsersFragment : Fragment() {
 
-    private lateinit var recyclerUsers : RecyclerView
-    private lateinit var btnAddUser : FloatingActionButton
+    private lateinit var binding : UsersFragmentBinding
 
     private lateinit var usersViewModel : UsersViewModel
     private lateinit var usersAdapter : UsersAdapter
@@ -31,9 +32,9 @@ class UsersFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.users_fragment, null)
+        binding = UsersFragmentBinding.inflate(inflater)
 
-        initViews(view)
+        initViews()
         initViewModels()
         initAdapter()
         initObservers()
@@ -41,11 +42,11 @@ class UsersFragment : Fragment() {
 
         usersViewModel.fetchUsers()
 
-        return view
+        return binding.root
     }
 
     private fun initListeners() {
-        recyclerUsers.addOnScrollListener(
+        binding.recyclerUsers.addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -55,7 +56,7 @@ class UsersFragment : Fragment() {
             }
         })
 
-        btnAddUser.setOnClickListener {
+        binding.btnAddUser.setOnClickListener {
             addAddUserFragment()
         }
     }
@@ -84,7 +85,7 @@ class UsersFragment : Fragment() {
 
     private fun initAdapter() {
         usersAdapter = UsersAdapter(usersViewModel.users)
-        recyclerUsers.adapter = usersAdapter
+        binding.recyclerUsers.adapter = usersAdapter
     }
 
     private fun initViewModels() {
@@ -98,12 +99,8 @@ class UsersFragment : Fragment() {
         ).get(UsersViewModel::class.java)
     }
 
-    private fun initViews(view : View) {
-
-        btnAddUser = view.findViewById(R.id.btnAddUser)
-
-        recyclerUsers = view.findViewById(R.id.recyclerUsers)
-        recyclerUsers.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    private fun initViews() {
+        binding.recyclerUsers.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
 }

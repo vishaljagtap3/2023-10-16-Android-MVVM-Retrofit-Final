@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bitcodetech.mvvmdemo2.R
+import com.bitcodetech.mvvmdemo2.databinding.UserViewBinding
 import com.bitcodetech.mvvmdemo2.models.User
 import com.bumptech.glide.Glide
 
@@ -16,14 +17,9 @@ class UsersAdapter(
 ) : RecyclerView.Adapter<UsersAdapter.UserViewHolder>(){
 
     inner class UserViewHolder(view : View) : RecyclerView.ViewHolder(view) {
-        val imgUser : ImageView
-        val txtUsername : TextView
-        val txtEmail : TextView
-
+        val userViewBinding : UserViewBinding
         init {
-            imgUser = view.findViewById(R.id.imgUser)
-            txtUsername = view.findViewById(R.id.txtUsername)
-            txtEmail = view.findViewById(R.id.txtEmail)
+            userViewBinding = UserViewBinding.bind(view)
         }
     }
 
@@ -37,15 +33,19 @@ class UsersAdapter(
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val user = users[position]
-        holder.txtUsername.text = "${user.firstName} ${user.lastName}"
-        holder.txtEmail.text = user.email
-        Glide.with(holder.itemView)
-            .load(user.avatar)
+        //val user = users[position]
+
+        holder.userViewBinding.user = users[position]
+
+        /*holder.userViewBinding.txtUsername.text = "${user.firstName} ${user.lastName}"
+        holder.userViewBinding.txtEmail.text = user.email*/
+
+       /* Glide.with(holder.itemView)
+            .load(users[position].avatar)
             .circleCrop()
             .error(R.mipmap.ic_launcher)
             .placeholder(R.mipmap.ic_launcher)
-            .into(holder.imgUser)
+            .into(holder.userViewBinding.imgUser)*/
     }
 
 }
